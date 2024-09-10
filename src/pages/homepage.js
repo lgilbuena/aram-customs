@@ -96,7 +96,7 @@ export const Homepage = () => {
     })
     const fetchChampions = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/champions'); // Your backend URL
+        const response = await axios.get('https://aram-customs.onrender.com/api/champions'); // Your backend URL
         const championsArray = Object.values(response.data); // Convert object to array
         setChampions(championsArray);
 
