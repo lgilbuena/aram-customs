@@ -1,0 +1,64 @@
+@font-face{
+    font-family: 'BeaufortForLoLBold';
+    src: local('BeaufortForLoL'),
+        url(../fonts/BeaufortForLoL-OTF/BeaufortforLOL-Bold.otf) format('opentype');
+}
+
+@font-face{
+    font-family: 'BeaufortForLoL';
+    src: local('BeaufortForLoL'),
+        url(../fonts/BeaufortForLoL-OTF/BeaufortforLOL-Regular.otf) format('opentype');
+}
+
+.signin{
+    background-image: url('../imgs/howlingabyss.png');
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.signin-card{
+    background-color: whitesmoke ;
+    height: 60vh;
+    width: 25vw;
+    border-radius: 10%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 3%;
+    align-items: center;
+    margin:auto;
+}
+
+.title{
+    font-family: 'BeaufortForLoLBold';
+    font-size: 3vh;
+    align-self: center;
+}
+
+.username-input{
+    height: 7%;
+    width: 80%;
+    display: flex;
+    align-self: center;
+    font-family: 'BeaufortForLoLBold';
+    font-size: large;
+}
+
+.username-input::placeholder{
+    font-family: 'BeaufortForLoL'
+}
+
+
+  
+  
+
+.lobby-input{
+    height: 7%;
+    width: 80%;
+    display: flex;
+    align-self: center;
+    font-family: 'BeaufortForLoL';
+}

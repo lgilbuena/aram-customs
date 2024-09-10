@@ -1,0 +1,101 @@
+@font-face{
+    font-family: 'BeaufortForLoLBold';
+    src: local('BeaufortForLoL'),
+        url(../fonts/BeaufortForLoL-OTF/BeaufortforLOL-Bold.otf) format('opentype');
+}
+
+@font-face{
+    font-family: 'BeaufortForLoL';
+    src: local('BeaufortForLoL'),
+        url(../fonts/BeaufortForLoL-OTF/BeaufortforLOL-Regular.otf) format('opentype');
+}
+
+.lobby-screen{
+    background-image: url('../imgs/howlingabyss.png');
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+}
+
+h2{
+    font-family: 'BeaufortForLoLBold';
+    font-size: 3vh;
+    color: white;
+}
+
+.grid-container{
+    display:grid;
+    grid-template-columns: auto auto;
+    padding: 2%;
+    width: 90%;
+    align-items: center;
+    justify-items: center;
+    align-self: center;
+
+}
+
+.grid-items{
+  border: 2px solid #536DFE;
+  padding: 5%;
+  border-radius: 4vh;
+  font-size: 3vh;
+  text-align: center;
+  width: 80%;
+  font-family: 'BeaufortForLoL';
+  color: #536DFE;
+  background-color: white;
+}
+
+.button-container{
+    align-self: center;
+    justify-self: center;
+}
+
+button {
+    align-items: center;
+    appearance: none;
+    background-color: #EEF2FF;
+    border-radius: 8px;
+    border-width: 2px;
+    border-color: #536DFE;
+    box-shadow: rgba(83, 109, 254, 0.2) 0 2px 4px, rgba(83, 109, 254, 0.15) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
+    box-sizing: border-box;
+    color: #536DFE;
+    cursor: pointer;
+    display: inline-flex;
+    font-family: "BeaufortForLoLBold", monospace;
+    height: 6vh;
+    width: 12vw;
+    justify-content: center;
+    line-height: 1;
+    list-style: none;
+    overflow: hidden;
+    padding-left: 24px;
+    padding-right: 24px;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    transition: box-shadow 0.15s, transform 0.15s;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    white-space: nowrap;
+    will-change: box-shadow, transform;
+    font-size: 1vw
+  }
+  
+button:focus {
+outline: none;
+box-shadow: #D6D6E7 0 0 0 1.5px inset, rgba(83, 109, 254, 0.4) 0 2px 4px, rgba(83, 109, 254, 0.3) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
+}
+
+button:hover {
+box-shadow: rgba(83, 109, 254, 0.3) 0 4px 8px, rgba(83, 109, 254, 0.2) 0 7px 13px -3px, #D6D6E7 0 -3px 0 inset;
+transform: translateY(-2px);
+}
+
+button:active {
+box-shadow: #D6D6E7 0 3px 7px inset;
+transform: translateY(2px);
+}
