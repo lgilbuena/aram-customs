@@ -48,7 +48,7 @@ export const Lobby = () => {
         if(!isPlayer){
             navigate("/")
         }
-    }, [isPlayer])
+    }, )
 
     const handleStartClick = () => {
         navigate(`/champ-select/${roomId}`);

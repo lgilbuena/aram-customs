@@ -189,7 +189,7 @@ export const Homepage = () => {
     // Use the setPlayerChampMap function to correctly update the state
     let hovered = false
     for(const i in playerChampMap){
-      if(playerChampMap[i] !== null && playerChampMap[i].id==x.id){
+      if(playerChampMap[i] !== null && playerChampMap[i].id===x.id){
         hovered = true
       }
     }
