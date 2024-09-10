@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import io from 'socket.io-client';
 import './signin.css'
-export const socket = io('http://localhost:5000');
+export const socket = io('https://aram-customs.onrender.com');
 export const SignInPage = () => {
     const [lobbyCode, setLobbyCode] = useState("")
     const [username,setUsername] = useState("")
