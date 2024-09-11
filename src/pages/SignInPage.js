@@ -12,6 +12,7 @@ export const SignInPage = () => {
         // Listen for the 'roomCreated' event and navigate to the specific room page
         socket.on('roomCreated', (roomName) => {
             navigate(`/lobby/${roomName}`);
+            socket.emit('ackRoomCreated');
         });
         
         socket.on('joinedRoom', (roomName) =>{

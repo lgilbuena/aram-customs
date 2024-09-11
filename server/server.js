@@ -41,22 +41,26 @@ io.on('connection', (socket) => {
 
     // Handle room creation
     socket.on('createRoom', (username) => {
-        const roomName = uuidv4(); // Generate a random room name (UUID)
+        const roomName = uuidv4();
         socket.username = username;
-        rooms[roomName] = { members: [] }; // Add the room to the rooms object
-        rooms[roomName].members.push({ id: socket.id, username: username, team:0, lockedStatus: false }); // Add the current user to the room's member list
-        socket.join(roomName); // Add the user to the room in Socket.IO
+        rooms[roomName] = { members: [] };
+        rooms[roomName].members.push({ id: socket.id, username: username, team: 0, lockedStatus: false });
+        socket.join(roomName);
         console.log(`${socket.id} created and joined room: ${roomName}`);
     
         // Emit the room name back to the client
-        socket.emit('isLeader',true)
         socket.emit('roomCreated', roomName);
     
         // Emit the updated user list after room creation
         const updatedUserList = rooms[roomName].members.map(member => member.username);
         io.to(roomName).emit('returnNum', rooms[roomName].members.length, updatedUserList);
-        
     });
+    
+    // Handle acknowledgment from client
+    socket.on('ackRoomCreated', () => {
+        socket.emit('isLeader', true);
+    });
+    
     
 
     // Handle user disconnection
