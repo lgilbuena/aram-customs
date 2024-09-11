@@ -50,7 +50,6 @@ io.on('connection', (socket) => {
     
         // Emit the room name back to the client
         socket.emit('roomCreated', roomName);
-    
         // Emit the updated user list after room creation
         const updatedUserList = rooms[roomName].members.map(member => member.username);
         io.to(roomName).emit('returnNum', rooms[roomName].members.length, updatedUserList);
