@@ -19,6 +19,9 @@ export const SignInPage = () => {
             navigate(`/lobby/${roomName}`);
         })
 
+        socket.on('failedConnect',() =>{
+            setErrorMessage('Server has already started!');
+        })
         // Cleanup listener when the component unmounts
         return () => {
             socket.off('roomCreated');

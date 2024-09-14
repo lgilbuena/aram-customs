@@ -43,7 +43,7 @@ io.on('connection', (socket) => {
     socket.on('createRoom', (username) => {
         const roomName = uuidv4();
         socket.username = username;
-        rooms[roomName] = { members: [] };
+        rooms[roomName] = { serverStarted: false,members: [] };
         rooms[roomName].members.push({ id: socket.id, username: username, team: 0, lockedStatus: false });
         socket.join(roomName);
         console.log(`${socket.id} created and joined room: ${roomName}`);
@@ -102,16 +102,22 @@ io.on('connection', (socket) => {
     });
 
     socket.on('joinRoom', (room, username) => {
-        socket.username = username;
-        rooms[room].members.push({ id: socket.id, username: username, lockedStatus: false  });
-        socket.join(room);
-        console.log(`${socket.id} joined room: ${room}`);
-        socket.emit('joinedRoom', room);
+        if(rooms[room].serverStarted === false){
+            socket.username = username;
+            rooms[room].members.push({ id: socket.id, username: username, lockedStatus: false  });
+            socket.join(room);
+            console.log(`${socket.id} joined room: ${room}`);
+            socket.emit('joinedRoom', room);
 
-        // Emit the updated user list after joining
-        const updatedUserList = rooms[room].members.map(member => member.username);
-        io.to(room).emit('returnNum', rooms[room].members.length, updatedUserList);
-    });
+            // Emit the updated user list after joining
+            const updatedUserList = rooms[room].members.map(member => member.username);
+            io.to(room).emit('returnNum', rooms[room].members.length, updatedUserList);
+        }
+        else{
+            socket.emit('failedConnect')
+        }
+
+        });
 
     socket.on('getNumPlayers', (room) => {
         let userList = [];
@@ -138,7 +144,7 @@ io.on('connection', (socket) => {
                 member.team = 2; // Assign team 2
             }
         });
-
+        rooms[room].serverStarted = true
         socket.to(`${room}`).emit('connectToChampSelect',room)
     })
 
