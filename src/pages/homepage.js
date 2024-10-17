@@ -97,18 +97,18 @@ export const Homepage = () => {
     const fetchChampions = async () => {
       try {
         const response = await axios.get('https://aram-customs.onrender.com/api/champions'); // Your backend URL
-        let data = response.data;
-        data = data.map(champion => champion).filter(champion => {
-          champion !== "Nasus" && 
-          champion !== "Anivia" && 
-          champion !== "Akshan" && 
-          champion !== "AurelionSol" && 
-          champion !== "Veigar" && 
-          champion !== "K'sante" && 
-          champion !== "Smolder"
-        })
+        // let data = response.data;
+        // data = data.map(champion => champion).filter(champion => {
+        //   champion !== "Nasus" && 
+        //   champion !== "Anivia" && 
+        //   champion !== "Akshan" && 
+        //   champion !== "AurelionSol" && 
+        //   champion !== "Veigar" && 
+        //   champion !== "K'sante" && 
+        //   champion !== "Smolder"
+        // })
 
-        const championsArray = Object.values(data); // Convert object to array
+        const championsArray = Object.values(response.data); // Convert object to array
 
         setChampions(championsArray);
 
