@@ -103,3 +103,19 @@ button:active {
 box-shadow: #D6D6E7 0 3px 7px inset;
 transform: translateY(2px);
 }
+
+/* Polished responsive lobby treatment */
+.lobby-screen {
+    min-height: 100vh;
+    width: 100%;
+    padding: 56px 24px 40px;
+    align-items: center;
+    background: linear-gradient(120deg, rgba(4, 12, 25, .82), rgba(16, 44, 70, .5)), url('../imgs/howlingabyss.png') center / cover fixed no-repeat;
+}
+h2 { width: min(100%, 900px); margin: 0 0 8px; font-size: clamp(1.6rem, 3vw, 2.25rem); text-align: center; }
+h2 + h2 { margin-top: 6px; color: #9edff8; font-size: 1rem; letter-spacing: .08em; text-transform: uppercase; }
+.grid-container { gap: 14px; padding: 28px 0; width: min(100%, 900px); }
+.grid-items { width: 100%; min-height: 74px; height: auto; padding: 16px; border: 1px solid rgba(142, 221, 255, .38); border-radius: 12px; font-size: 1.15rem; color: #e9f8ff; background: rgba(10, 26, 45, .75); box-shadow: 0 12px 30px rgba(0, 0, 0, .18); }
+.button-container { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+button { background: linear-gradient(100deg, #8fe3ff, #c4f2ff); color: #07111f; border: 0; font-size: .85rem; }
+@media (max-width: 560px) { .lobby-screen { padding: 34px 16px 28px; } .grid-container { grid-template-columns: 1fr; } .button-container button { width: min(100%, 220px); } }

@@ -5,7 +5,11 @@
 
 body {
     margin: 0;
-    background-color: white; /* Background color for the entire page */
-    height: 100vh; /* Ensure body height covers the full viewport */
-    overflow: hidden; /* Prevent scrolling on the entire page */
+    background: #07111f;
+    color: #f5f7fb;
+    min-height: 100vh;
+    overflow-x: hidden;
 }
+
+*, *::before, *::after { box-sizing: border-box; }
+button, input { font: inherit; }

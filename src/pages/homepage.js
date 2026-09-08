@@ -20,33 +20,20 @@ export const Homepage = () => {
   const [playerChampMap, setPlayerChampMap] = useState({})
   const [playerVal,setPlayerVal] = useState({})
   const [playerNameList,setPlayerNameList] = useState([])
-  const [essentialsCalled, setEssentialsCalled] = useState(false);
   const [lockedIn,setLockedIn] = useState(false)
   const [revealState, setRevealState] = useState(false)
+  const [initialRollDone, setInitialRollDone] = useState(false)
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (!essentialsCalled) {
-      function callEssentials() {
-        socket.emit('getNumPlayers', roomId);
-        socket.emit('getIndex', roomId);
-        socket.emit('getPlayerList', roomId);
-        socket.emit('getTeam', roomId);
-      }
-  
-      callEssentials();
-      setEssentialsCalled(true);
-    }
-  
-    socket.on('returnTeamVal', (val) => {
-      setPlayerVal(val);
-    });
-  
-    // Other socket event handlers and cleanup
-  }, [roomId, essentialsCalled]);
+    socket.emit('getNumPlayers', roomId);
+    socket.emit('getIndex', roomId);
+    socket.emit('getPlayerList', roomId);
+    socket.emit('getTeam', roomId);
+  }, [roomId]);
 
   useEffect(() => {
-    socket.on('championSelected', (champ, teamval) => {
+    const handleChampionSelected = (champ, teamval) => {
       console.log(`Received! ${champ.id}! Sending to team`, teamval);
       console.log(playerVal.team, teamval);
   
@@ -69,10 +56,11 @@ export const Homepage = () => {
       } else {
         socket.emit('getTeam', roomId);
       }
-    });
+    };
+    socket.on('championSelected', handleChampionSelected);
   
     return () => {
-      socket.off('championSelected');
+      socket.off('championSelected', handleChampionSelected);
     };
   }, [playerVal]);
   
@@ -88,12 +76,14 @@ export const Homepage = () => {
 
   useEffect(() => {
 
-    socket.on('returnTeamVal',(val)=>{
-      if(val === null){
+    const handleTeam = (val) => {
+      if(!val){
         navigate('/')
+        return;
       }
       setPlayerVal(val)
-    })
+    };
+    socket.on('returnTeamVal', handleTeam)
     const fetchChampions = async () => {
       try {
         const response = await axios.get('https://aram-customs.onrender.com/api/champions'); // Your backend URL
@@ -112,8 +102,6 @@ export const Homepage = () => {
 
         setChampions(championsArray);
 
-        // Display one random champion on initial load
-        selectRandomChampion(championsArray);
       } catch (error) {
         console.error('Error fetching champions:', error);
       }
@@ -128,11 +116,12 @@ export const Homepage = () => {
 
     socket.on('returnNum',(playerCount,users) =>{
       setNumPlayers(playerCount)
-      let newPlayerChampMap = {};
-      for(let i = 0; i < playerCount; i++){
-        newPlayerChampMap[i] = null;
-      }
-      setPlayerChampMap(newPlayerChampMap)
+      setPlayerChampMap(prevMap => {
+        if (Object.keys(prevMap).length > 0) return prevMap;
+        const newPlayerChampMap = {};
+        for(let i = 0; i < playerCount; i++) newPlayerChampMap[i] = null;
+        return newPlayerChampMap;
+      })
     })
     
     socket.on('returnIndex',(myIdx)=>{
@@ -155,15 +144,28 @@ export const Homepage = () => {
     socket.on('revealChamps', () => {
       setRevealState(true)
     })
+
+    socket.on('matchAborted', () => {
+      window.alert('The match ended because a player disconnected.');
+      navigate('/');
+    });
+
+    socket.on('roomError', (message) => {
+      window.alert(message);
+    });
     
 
    
 
     return () => {
-      socket.off('championSelected');
       socket.off('returnNum')
       socket.off('returnIndex')
-      socket.off('returnTeamVal')
+      socket.off('addChamps')
+      socket.off('returnPlayerList')
+      socket.off('revealChamps')
+      socket.off('returnTeamVal', handleTeam)
+      socket.off('matchAborted')
+      socket.off('roomError')
     };
 
     
@@ -171,13 +173,13 @@ export const Homepage = () => {
 
 
   // Function to select a random champion excluding the ones already displayed
-  const selectRandomChampion = (excludeChampions = []) => {
+  const selectRandomChampion = (excludeChampions = [], availableChampions = champions) => {
     
-    if (champions.length === 0) return;
+    if (availableChampions.length === 0 || !playerVal.team) return;
 
     // Exclude already displayed champions
     const excludedIds = excludeChampions.map(champ => champ.id);
-    const filteredChampions = champions.filter(champ => !excludedIds.includes(champ.id));
+    const filteredChampions = availableChampions.filter(champ => !excludedIds.includes(champ.id));
 
     if (filteredChampions.length === 0) return; // No more champions to add
 
@@ -196,7 +198,15 @@ export const Homepage = () => {
     socket.emit('selectChampion',roomId,newChampion,playerVal.team)
   };
 
+  useEffect(() => {
+    if (champions.length > 0 && playerVal.team && !initialRollDone) {
+      selectRandomChampion([], champions);
+      setInitialRollDone(true);
+    }
+  }, [champions, playerVal.team, initialRollDone]);
+
   function handleClickedChamp(x) {
+    if (idx < 0) return;
     
     // Use the setPlayerChampMap function to correctly update the state
     let hovered = false
@@ -305,7 +315,7 @@ export const Homepage = () => {
   };
 
   const handleLockButton = () => {
-    if(playerChampMap[idx] !== null){
+    if(idx >= 0 && playerChampMap[idx] != null){
     setLockedIn(true)
     socket.emit('getLockedStatus',roomId)}
   }

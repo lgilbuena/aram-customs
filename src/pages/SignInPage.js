@@ -9,22 +9,20 @@ export const SignInPage = () => {
     const [errorMessage, setErrorMessage] = useState(""); // State for error message
     const navigate = useNavigate();
     useEffect(() => {
-        // Listen for the 'roomCreated' event and navigate to the specific room page
-        socket.on('roomCreated', (roomName) => {
+        const handleRoomCreated = (roomName) => {
             navigate(`/lobby/${roomName}`);
             socket.emit('ackRoomCreated');
-        });
-        
-        socket.on('joinedRoom', (roomName) =>{
-            navigate(`/lobby/${roomName}`);
-        })
+        };
+        const handleJoinedRoom = (roomName) => navigate(`/lobby/${roomName}`);
+        const handleRoomError = (message) => setErrorMessage(message);
 
-        socket.on('failedConnect',() =>{
-            setErrorMessage('Server has already started!');
-        })
-        // Cleanup listener when the component unmounts
+        socket.on('roomCreated', handleRoomCreated);
+        socket.on('joinedRoom', handleJoinedRoom);
+        socket.on('roomError', handleRoomError);
         return () => {
-            socket.off('roomCreated');
+            socket.off('roomCreated', handleRoomCreated);
+            socket.off('joinedRoom', handleJoinedRoom);
+            socket.off('roomError', handleRoomError);
         };
     }, [navigate]);
 
@@ -47,6 +45,8 @@ export const SignInPage = () => {
             setErrorMessage(""); // Clear any previous error messages
             console.log(username, `joining room with code:`, lobbyCode);
             socket.emit('joinRoom', lobbyCode, username);
+        } else {
+            setErrorMessage("Lobby code is required!");
         }
     };
 

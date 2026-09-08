@@ -35,12 +35,17 @@ export const Lobby = () => {
             setIsPlayer(val)
         })
 
+        socket.on("roomError", (message) => {
+            window.alert(message);
+        });
+
         // Cleanup listeners when the component unmounts
         return () => {
             socket.off("returnNum");
             socket.off("isLeader");
             socket.off("connectToChampSelect");
             socket.off("returnLobby");
+            socket.off("roomError");
         };
     }, [roomId, navigate]);
 
@@ -48,7 +53,7 @@ export const Lobby = () => {
         if(!isPlayer){
             navigate("/")
         }
-    }, )
+    }, [isPlayer, navigate])
 
     const handleStartClick = () => {
         navigate(`/champ-select/${roomId}`);
